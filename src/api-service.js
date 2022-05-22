@@ -7,7 +7,6 @@ export default class ApiService{
         this.page = 1;
     }
 
-
     async fetchArticles() {
 
         const searchParams = new URLSearchParams({
@@ -22,12 +21,10 @@ export default class ApiService{
         });
         const url = `${BASE_URL}?${searchParams}`;
 
+        const { data } = await axios.get(url);
+        this.incrementPage();
 
-        return await axios.get(url)
-            .then(({ data }) => {
-                this.incrementPage()
-                return data;
-            });
+        return data;
     }
     
     incrementPage() {
