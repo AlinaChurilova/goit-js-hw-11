@@ -12,7 +12,7 @@ const refs = {
     galleryContainer: document.querySelector('.gallery'),
 };
 
-let gallery = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionPosition: 'bottom', captionDelay: 250 });
+
 const apiService = new ApiService();
 const loadMoreBtn = new LoadMoreBtn({
     selector: '[data-action="load-more"]',
@@ -24,6 +24,7 @@ refs.searchForm.addEventListener('submit', onSearch);
 loadMoreBtn.refs.button.addEventListener('click', onLoadMoreBtn);
 
 function onInitializationSimpleLightbox() {
+    let gallery = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionPosition: 'bottom', captionDelay: 250 });
     gallery.on('show.simplelightbox', function () {     
     });
     return gallery;
@@ -50,10 +51,11 @@ async function onLoadMoreBtn() {
     try {
 
         await apiService.fetchArticles().then((data) => {
-           gallery.refresh();
+       
           appendHitsMarkup(data.hits);
           
-          loadMoreBtn.enable();
+            loadMoreBtn.enable();
+           
         if (data.hits.length < 40 && data.totalHits > 40) {
             loadMoreBtn.hide();
             return Notiflix.Notify.info(`We're sorry, but you've reached the end of search results.`);  
@@ -94,8 +96,7 @@ function appendHitsMarkup(hits) {
     const addMarkup = refs.galleryContainer.insertAdjacentHTML('beforeend', oneGalleryItemTpl(hits));
     
     if (!addMarkup) {
-        onInitializationSimpleLightbox(); 
-        
+        onInitializationSimpleLightbox();   
     }
 }
 
